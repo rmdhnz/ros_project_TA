@@ -29,6 +29,6 @@ sudo apt install cmake git libboost-dev libgnutls28-dev libjpeg-dev \
 libsdl2-dev python3-yaml python3-pip python3-jinja2 python3-pyqt5 \
 qtbase5-dev g++ meson ninja-build
 
-
+sudo apt install git cmake build-essential python3-pip libboost-all-dev libudev-dev libjpeg-dev libtiff5-dev libpng-dev libyaml-dev -y
 
 tes

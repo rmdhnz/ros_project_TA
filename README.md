@@ -25,5 +25,10 @@ sudo make install
 
 export PATH=$PATH:/usr/local/bin
 
+sudo apt install cmake git libboost-dev libgnutls28-dev libjpeg-dev \
+libsdl2-dev python3-yaml python3-pip python3-jinja2 python3-pyqt5 \
+qtbase5-dev g++ meson ninja-build
+
+
 
 tes

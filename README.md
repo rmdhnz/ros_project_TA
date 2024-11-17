@@ -31,4 +31,19 @@ qtbase5-dev g++ meson ninja-build
 
 sudo apt install git cmake build-essential python3-pip libboost-all-dev libudev-dev libjpeg-dev libtiff5-dev libpng-dev libyaml-dev -y
 
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      addresses:
+        - 192.168.1.100/24
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+
+
 tes

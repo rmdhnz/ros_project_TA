@@ -62,3 +62,63 @@ network:
           - 8.8.8.8
           - 8.8.4.4
 
+
+import rclpy
+from rclpy.node import Node
+import board
+import busio
+import adafruit_bno055
+from sensor_msgs.msg import Imu
+
+class BNO055Node(Node):
+    def __init__(self):
+        super().__init__('bno055_node')
+        self.publisher = self.create_publisher(Imu, 'imu/data', 10)
+        timer_period = 0.1  # 10 Hz
+        self.timer = self.create_timer(timer_period, self.publish_imu_data)
+
+        # Inisialisasi I2C dan sensor
+        i2c = busio.I2C(board.SCL, board.SDA)
+        self.sensor = adafruit_bno055.BNO055_I2C(i2c)
+        self.get_logger().info('BNO055 Node Started')
+
+    def publish_imu_data(self):
+        try:
+            imu_msg = Imu()
+            imu_msg.header.stamp = self.get_clock().now().to_msg()
+            imu_msg.header.frame_id = 'imu_link'
+
+            # Membaca data orientasi dari sensor
+            euler = self.sensor.euler
+            if euler is not None:
+                imu_msg.orientation.x = euler[0]
+                imu_msg.orientation.y = euler[1]
+                imu_msg.orientation.z = euler[2]
+
+            # Membaca data angular velocity
+            gyro = self.sensor.gyro
+            if gyro is not None:
+                imu_msg.angular_velocity.x = gyro[0]
+                imu_msg.angular_velocity.y = gyro[1]
+                imu_msg.angular_velocity.z = gyro[2]
+
+            # Membaca data linear acceleration
+            accel = self.sensor.linear_acceleration
+            if accel is not None:
+                imu_msg.linear_acceleration.x = accel[0]
+                imu_msg.linear_acceleration.y = accel[1]
+                imu_msg.linear_acceleration.z = accel[2]
+
+            # Publish data
+            self.publisher.publish(imu_msg)
+            self.get_logger().info('IMU Data Published')
+        except Exception as e:
+            self.get_logger().error(f'Error reading sensor: {e}')
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = BNO055Node()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+

@@ -69,7 +69,7 @@ def main(args=None):
         rclpy.shutdown()
     except KeyboardInterrupt : 
         dlogger = pd.DataFrame(node.data_logger)
-        dlogger.to_csv("data/data_lidar/datalidar.csv",index=False)
+        dlogger.to_csv("data/data_lidar/datalidar_s1.csv",index=False)
         # dlogger_anggle_min = pd.DataFrame(node.data_logger["angle_min"])
         # dlogger_anggle_max = pd.DataFrame(node.data_logger["angle_max"])
         # dlogger_angle_increment = pd.DataFrame(node.data_logger["angle_increment"])

@@ -40,10 +40,10 @@ class IMUPositionEstimator(Node):
             10
         )
 
+
     def imu_callback(self, msg:Imu):
         # Mendapatkan waktu sekarang
         current_time = self.get_clock().now().nanoseconds / 1e9  # Konversi ke detik
-
         # Jika ini pembacaan pertama, simpan waktu dan keluar
         if self.last_time is None:
             self.last_time = current_time
@@ -68,6 +68,8 @@ class IMUPositionEstimator(Node):
             msg.orientation.w
         ])
         roll,pitch,yaw = tf_transformations.euler_from_quaternion(quaternion)
+
+        
         rotation_matrix = R.from_quat(quaternion).as_matrix()
 
 

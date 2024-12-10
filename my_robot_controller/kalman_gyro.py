@@ -15,7 +15,7 @@ def mse_err(data,base=None) :
     
 
 
-data = pd.read_csv("data/data_imu/data_imu_mechanization.csv")
+data = pd.read_csv("data/data_imu/data_ekf_accel.csv")
 # Parameter model
 dt = 1.0  # Time step (seconds)
 Q = 0.1  # Process noise covariance
@@ -41,11 +41,11 @@ P = np.array([[1]])  # Initial state covariance
 num_steps = len(data["ax"])     # Number of time steps
 waktu = data["time"]
 ax = data["ax"]
-yaw = data["yaw"]
+wz = data["wz"]
 ay = data["ay"]
 bias_ax = np.mean(ax)
 # Storage for estimated velocities
-estimated_ax= np.zeros((len(waktu), 1))
+estimated= np.zeros((len(waktu), 1))
 # Extended Kalman Filter process
 for k in range(num_steps):
     # Prediction
@@ -53,7 +53,7 @@ for k in range(num_steps):
     P_pred = F(x).dot(P).dot(F(x).T) + Q
 
     # Measurement
-    z = yaw[k]
+    z = wz[k]
 
     # Kalman Gain
     K = P_pred.dot(H(x_pred).T).dot(np.linalg.inv(H(x_pred).dot(P_pred).dot(H(x_pred).T) + R))
@@ -63,20 +63,40 @@ for k in range(num_steps):
     P = (np.eye(1) - K.dot(H(x_pred))).dot(P_pred)
 
     # Store the estimated velocity
-    estimated_ax[k] = x
+    estimated[k] = x
 # Plotting results
-yaw = np.array(yaw)
+wz = np.array(wz)
+estimated_wz = []
+for i in range(len(estimated)) :
+    estimated_wz.append(estimated[i][0])
 
-err_ekf = abs(estimated_ax)
-err_gyro = abs(yaw)
-print("Rata rata error EKF\t:",np.mean(err_ekf))
-print("Rata rata error Gyro\t:",np.mean(err_gyro))
 if __name__ == '__main__':
     plt.figure(1)
-    plt.plot(waktu,err_gyro,label="Yaw")
-    plt.plot(waktu,err_ekf,label="EKF")
+    plt.plot(waktu,wz,label="wz")
+    plt.plot(waktu,estimated,label="EKF")
     plt.xlabel("Time (s)")
-    plt.ylabel("Error")
+    plt.ylabel("Angular velocity")
     plt.grid(True)
     plt.legend()
     plt.show()
+dlogger = {
+    "time" : data["time"],
+    "ax" : ax,
+    "ay" : ay,
+    "az" : data["az"],
+    "wx" : data["wx"],
+    "wy" : data["wy"],
+    "wz" : data["wz"],
+    "or_x" : data["or_x"],
+    "or_y" : data["or_y"],
+    "or_z" : data["or_z"],
+    "or_w" : data["or_w"],
+    "kf_ax" : data["kf_ax"],
+    "kf_ay" : data["kf_ay"],
+    "kf_az" : data["kf_az"],
+    "kf_wz" : estimated_wz
+}
+
+d = pd.DataFrame(dlogger)
+d.to_csv("data/data_imu/data_imu_ekf.csv",index=False)
+

@@ -23,15 +23,14 @@ def main() :
     try:
         rclpy.init()
         nav = BasicNavigator()
-        initial_pose = create_pose_stamped(nav,5.0,5.0,0.0)
+        initial_pose = create_pose_stamped(nav,0.0,0.0,0.0)
         nav.setInitialPose(initial_pose)
         nav.waitUntilNav2Active()
 
         # send nav goal
         waypoints = []
-        waypoints.append(create_pose_stamped(nav,5.0,-5.0,-1.57))
-        waypoints.append(create_pose_stamped(nav,10.0,-8.0,1.57))
-        waypoints.append(create_pose_stamped(nav,10.0,0.0,0.0))
+        waypoints.append(create_pose_stamped(nav,2.0,-8.0,-1.57))
+        waypoints.append(create_pose_stamped(nav,8.0,-3.0,1.57))
         
         # follow  waypoints
         nav.followWaypoints(waypoints)

@@ -32,8 +32,8 @@ class NavTest(Node) :
         goal_pose = PoseStamped()
         goal_pose.header.frame_id ='map'
         goal_pose.header.stamp = nav.get_clock().now().to_msg()
-        goal_pose.pose.position.x = 5.0
-        goal_pose.pose.position.y = -5.0
+        goal_pose.pose.position.x = 8.0
+        goal_pose.pose.position.y = -8.0
         goal_pose.pose.position.z = 0.0
         goal_pose.pose.orientation.x = qx
         goal_pose.pose.orientation.y = qy
@@ -42,8 +42,12 @@ class NavTest(Node) :
         nav.goToPose(goal_pose)
         while not nav.isTaskComplete() : 
             feedback = nav.getFeedback()
+            msg.data = "Proccess"
+            self.pub.publish(msg)
             # print(feedback)
         print(nav.getResult())
+        msg.data  = 'Success'
+        self.pub.publish(msg)
         print(type(nav.getResult()))
 
 

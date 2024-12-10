@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
@@ -12,13 +10,13 @@ import tf_transformations
 
 class PositionOrientationNode(Node):
     def __init__(self):
-        super().__init__('imu_filtered_node')
-        self.get_logger().info('EKF Imu filtered')
+        super().__init__('odom_raw_data')
+        self.get_logger().info('Odom raw has been started')
         
         # Subscribing ke topik odom
         self.subscription = self.create_subscription(
             Odometry,
-            '/odometry/filtered',  # Ganti dengan topik yang sesuai
+            '/odom',  # Ganti dengan topik yang sesuai
             self.odom_callback,
             10  # QoS
         )
@@ -59,7 +57,7 @@ class PositionOrientationNode(Node):
 
     def timer_callback(self):
         # Hanya log data jika posisi dan orientasi telah diperbarui
-        if self.position and self.orientation and self.current_time <=70.0:
+        if self.position and self.orientation and self.current_time <=80.0:
             quaternion = np.array([
                 self.orientation.x,
                 self.orientation.y,
@@ -106,6 +104,7 @@ def main(args=None):
         node.destroy_node()
         rclpy.shutdown()
     except KeyboardInterrupt:
-        d = pd.DataFrame(node.data_logger)
-        d.to_csv('data/data_fusion/ekf_imu.csv', index=False)
+        dlogger = pd.DataFrame(node.data_logger)
+        dlogger.to_csv("data/data_odom/data_odom_raw_scene_4.csv",index=False)
+        print("\nFile has been saved!")
 

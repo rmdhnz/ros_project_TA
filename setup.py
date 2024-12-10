@@ -20,22 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "draw_circle = my_robot_controller.draw_circle:main", 
             "turtle_controller = my_robot_controller.turtle_controller:main",
-            "pose_subscriber = my_robot_controller.pose_subscriber:main",
-            "sender_node = my_robot_controller.sender:main", 
-            "receiver_node = my_robot_controller.receiver:main", 
-            "simple_service = my_robot_controller.simple_service:main",
-            "client_simple = my_robot_controller.client_simple:main",
-            "count_until_server = my_robot_controller.count_until:main",
-            "count_until_client = my_robot_controller.count_until_client:main",
-            "draw_rectangle = my_robot_controller.draw_rectangle:main",
-            "move_server = my_robot_controller.move_server:main",
-            "move_client = my_robot_controller.move_client:main",
-            "turtle_move = my_robot_controller.turtle_move:main",
-            "pattern_server = my_robot_controller.pattern_server:main",
-            "pattern_client = my_robot_controller.pattern_client:main",
-            "test_drive = my_robot_controller.tes_drive:main", 
             "imu_node = my_robot_controller.imu_sens:main",
             "lidar_node = my_robot_controller.lidar_node:main",
             "odom_node = my_robot_controller.odom_node:main",
@@ -46,6 +31,9 @@ setup(
             "path_saver =my_robot_controller.save_path:main",
             "imu_filtered_node=my_robot_controller.imu_filtered:main",
             "odom_filtered_node=my_robot_controller.odom_filtered:main",
+            "imu_raw_data=my_robot_controller.imu_raw_data:main",
+            "odom_raw_data=my_robot_controller.odom_raw_data:main",
+            "obstacle_monitor=my_robot_controller.obstacle_monitor:main"
         ],
     },
 )
